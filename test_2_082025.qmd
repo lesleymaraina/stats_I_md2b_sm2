@@ -1,0 +1,655 @@
+---
+title: "Descriptive Statistics and Probability"
+author: "<br><br><span style='font-size:25px;'><strong>Lesley Chapman Hannah, Ph.D., M.S.</strong></span><br>College of Graduate Studies<br>Northeast Ohio Medical University"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    incremental: false
+    width: 1400
+    height: 900
+execute:
+  echo: true
+  warning: false
+  message: false
+editor: visual
+---
+
+## Title Slide
+
+**Course theme:** Descriptive Statistics and Probability\
+**Central focus of this lecture block:** group-level summaries and comparative plots\
+**Guiding question:** How do group summaries and comparative plots reveal differences in location, spread, and distribution?
+
+This lecture block stays within descriptive statistics. The goal is not yet to estimate a final regression model or test a formal causal claim. The goal is to describe how a variable behaves within clinically meaningful groups such as treatment arms, disease-status categories, or cohort strata.
+
+------------------------------------------------------------------------
+
+## Why Group-Based Description Matters
+
+In biomedical data analysis, a single overall summary can hide clinically meaningful heterogeneity.
+
+A pooled mean or a pooled plot may suggest that a biomarker has one typical pattern, even when patients in different treatment groups show very different distributions.
+
+That is why descriptive analysis often moves from:
+
+$$
+\text{overall summary} \rightarrow \text{group-specific summary} \rightarrow \text{comparative plot} \rightarrow \text{scientific interpretation}
+$$
+
+In one sentence, this expression states that descriptive group analysis starts by summarizing the full sample, then stratifies by a clinically meaningful grouping variable, then visualizes the group-specific patterns, and finally interprets those patterns in scientific terms.
+
+**Key elements of the formula**
+
+-   **overall summary**: a single description computed across all observations together
+-   **group-specific summary**: a separate description computed within each subgroup
+-   **comparative plot**: a visualization designed to compare groups directly
+-   **scientific interpretation**: the biomedical meaning assigned to observed differences in center, spread, or shape
+
+------------------------------------------------------------------------
+
+## Core Packages Used in This Deck
+
+```{r}
+library(tidyverse)
+library(scales)
+library(GGally)
+
+theme_set(theme_minimal(base_size = 18))
+set.seed(2026)
+```
+
+**Package context**
+
+-   **tidyverse** is a collection of R packages for data import, manipulation, and visualization; here it supplies `tibble()`, `group_by()`, `summarise()`, `count()`, `mutate()`, and `ggplot()`
+-   **scales** provides formatting helpers for axes and labels; here `percent_format()` converts proportions into percentages for easier interpretation
+-   **GGally** extends `ggplot2` with additional plotting tools for multivariable exploration; it is loaded here as part of a broader descriptive workflow even though the main examples in this block rely primarily on `ggplot2`
+-   `theme_set(theme_minimal(base_size = 18))` establishes a clean plotting theme and readable font size for every figure that follows
+-   `set.seed(2026)` fixes the random-number seed so the simulated teaching example is reproducible
+
+------------------------------------------------------------------------
+
+## Lecture 5: Group-Level Summaries and Comparative Displays
+
+**Central focus:** descriptive analysis often compares groups defined by treatment, disease status, or cohort membership.
+
+This lecture block asks:
+
+**How do group summaries and comparative plots reveal differences in location, spread, and distribution?**
+
+The key idea is that descriptive statistics become more informative once they are aligned to the clinical structure of the study. In practice, investigators rarely care only about the overall distribution of a biomarker. They want to know whether distributions differ by exposure, intervention, or disease subgroup.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Roadmap
+
+This block focuses on:
+
+-   mean and median by group\
+-   summary tables\
+-   boxplots\
+-   violin plots\
+-   probability within groups\
+-   interpretation of subgroup heterogeneity
+
+**Key terms for this block**
+
+-   **group**: a set of observations sharing the same category, such as treatment arm or disease class
+-   **location**: where values tend to be centered, often described by the mean or median
+-   **spread**: how variable the observations are, often described by the standard deviation or IQR
+-   **distribution**: the overall pattern of values, including center, spread, skewness, and tail behavior
+-   **heterogeneity**: meaningful variation across subgroups rather than within one pooled population alone
+
+## Lecture 5 Additional Conceptual Framing for Group Comparisons
+
+Before looking at individual tables and plots, it is important to define what a **group comparison** means in descriptive statistics.
+
+A **group comparison** asks whether the observed values of a variable look different once the sample is partitioned by a clinically meaningful categorical variable such as treatment arm, disease status, or cohort membership.
+
+In this lecture, the phrase **group-level summaries and comparative plots** means that we are not only describing one variable overall. We are describing how that variable behaves **within each subgroup** and then comparing those subgroup-specific descriptions across groups.
+
+**Why this matters in biomedical data**
+
+-   treatment groups may differ in average biomarker level
+-   disease subtypes may differ in variability, not only in average level
+-   two groups may have similar means but very different internal distributions
+-   descriptive comparison is often the first step before any formal modeling or hypothesis testing
+
+This framing is consistent with the descriptive emphasis in Peck and Olsen, the applied data-science perspective in Bruce, Bruce, and Gedeck, and the sampling logic emphasized by Cochran: subgroup summaries are meaningful only because the observed sample is being used to describe patterns in a larger scientific population.
+
+------------------------------------------------------------------------
+
+## Lecture 5 How to Read Mean and Median in Group Summary Tables
+
+When a summary table reports a **mean by group**, it is describing the arithmetic average within each subgroup.
+
+The **mean** is most informative when we want a measure of average level that uses every observed value directly. Because every value contributes to the mean, very high or very low observations can pull it upward or downward.
+
+When a summary table reports a **median by group**, it is describing the middle ordered value within each subgroup.
+
+The **median** is most informative when we want a measure of central location that is less sensitive to skewness or unusually large values. For right-skewed biomarkers, the median often aligns more closely with the value observed for a typical patient.
+
+**How to compare mean and median across groups**
+
+-   if group means differ, the average level differs across subgroups
+-   if group medians differ, the central ordered location differs across subgroups
+-   if the mean is much larger than the median within a group, that suggests right-skewness or a high-end tail
+-   if mean and median are close within a group, that often suggests a more symmetric distribution
+
+Within the logic of this lecture, mean and median are not competing summaries. They are complementary summaries that help us understand **location** under different distributional shapes.
+
+------------------------------------------------------------------------
+
+## Lecture 5 How to Read Summary Tables Universally
+
+A group summary table is most useful when it is read systematically.
+
+**Key things to look for universally when comparing groups**
+
+-   **sample size**: are the groups similar in size, or are some summaries based on much smaller numbers of observations?
+-   **location**: do the means or medians differ across groups?
+-   **spread**: do the standard deviations or IQRs differ across groups?
+-   **mean-median agreement**: are the mean and median similar within groups, or do they diverge in ways that suggest skewness?
+-   **clinical magnitude**: are the observed differences large enough to matter scientifically, not only numerically?
+-   **consistency across variables**: do multiple outcomes point in the same descriptive direction?
+
+This checklist is useful across nearly all grouped descriptive summaries in biomedical research, whether the variable is a cytokine concentration, a cell count, a length-of-stay measure, or a categorical response profile.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Interpreting Boxplots and Violin Plots More Deeply
+
+Boxplots and violin plots answer related but not identical descriptive questions.
+
+A **boxplot** is most effective when we want a compact summary of:
+
+-   median
+-   quartiles
+-   interquartile range
+-   tail extension
+-   unusually extreme observations
+
+A **violin plot** is most effective when we also want to inspect the internal shape of the distribution, including whether the distribution appears concentrated, skewed, or possibly multimodal.
+
+**Universal checklist for plot-based comparison across groups**
+
+-   is one group positioned higher or lower overall on the y-axis?
+-   are some groups more vertically spread out than others?
+-   do some groups show stronger skewness or longer tails?
+-   do any groups contain more extreme values?
+-   does the shape suggest internal subgroup structure or heterogeneity within a treatment arm?
+
+In descriptive work, no single plot answers everything. That is why boxplots, violin plots, and grouped histograms often work best as complementary views of the same group comparison problem.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Probability Within Groups: Interpretation
+
+When we compute probability within groups, we are describing the internal composition of each subgroup.
+
+For example, if a treatment arm has a 40% responder probability, that does not mean 40% of the entire study responded. It means that **within that treatment arm**, 40% of patients were responders.
+
+This distinction matters because descriptive probability within groups is **conditional** on group membership.
+
+In biomedical interpretation, this helps answer questions such as:
+
+-   what fraction of placebo patients responded?
+-   what fraction of high-dose patients progressed?
+-   does the response composition shift across treatment conditions?
+
+This kind of grouped probability table is often the categorical-data analogue of a grouped mean or grouped boxplot: instead of describing where values lie on a continuous scale, it describes how category membership is distributed within each subgroup.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Interpreting Subgroup Heterogeneity
+
+**Subgroup heterogeneity** means that the observations within a group are not all tightly clustered around one common pattern.
+
+In descriptive statistics, subgroup heterogeneity may appear as:
+
+-   a wide IQR
+-   a large standard deviation
+-   long whiskers in a boxplot
+-   a wide or irregular violin shape
+-   multiple peaks in a histogram or violin plot
+-   large differences between low and high observations within the same group
+
+**Why subgroup heterogeneity matters**
+
+A group with a high mean is not necessarily a uniform group. It may contain:
+
+-   patients who respond very strongly
+-   patients who respond weakly
+-   mixtures of clinically distinct subpopulations
+
+That is why descriptive analysis should never stop at one number alone. The mean may summarize the center, but the spread and shape help determine whether that center represents a homogeneous group or a heterogeneous one.
+
+## ------------------------------------------------------------------------
+
+## Lecture 5 New Data Context
+
+Suppose an immunotherapy study follows patients in three arms:
+
+-   placebo\
+-   low dose\
+-   high dose
+
+The study records interferon-gamma concentration, CD4 count, and clinical response class. The descriptive goal is to understand how the distributions differ across treatment groups.
+
+This is a classic biomedical descriptive setting. The treatment variable defines the groups, IFN-gamma and CD4 count are continuous outcomes summarized within groups, and response class is a categorical outcome whose proportions can also be compared across groups.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Simulated Grouped Dataset
+
+```{r}
+set.seed(305)
+
+group_df <- tibble(
+  patient_id = sprintf("G%03d", 1:210),
+  treatment = sample(c("Placebo", "Low dose", "High dose"), 210, replace = TRUE),
+  ifng = round(rlnorm(
+    210,
+    meanlog = c("Placebo" = log(11), "Low dose" = log(15), "High dose" = log(20))[treatment],
+    sdlog = 0.42
+  ), 2),
+  cd4_count = round(rnorm(
+    210,
+    mean = c("Placebo" = 510, "Low dose" = 575, "High dose" = 645)[treatment],
+    sd = 95
+  )),
+  response_class = sample(c("Responder", "Stable", "Progressive"), 210, replace = TRUE,
+                          prob = c(0.35, 0.40, 0.25))
+)
+
+group_df |> slice_head(n = 8)
+```
+
+**How to read the simulation setup**
+
+-   `tibble()` creates a rectangular data object in tidyverse format
+-   `sample()` assigns patients to treatment groups and response categories
+-   `rlnorm()` simulates a right-skewed biomarker distribution for IFN-gamma, which is common for inflammatory markers
+-   `rnorm()` simulates CD4 count from an approximately symmetric distribution
+-   `slice_head(n = 8)` prints the first eight rows so students can inspect variable structure
+
+**Why these distributions were chosen**
+
+-   IFN-gamma is simulated with a **log-normal distribution** because biomarker concentrations are often positive and right-skewed
+-   CD4 count is simulated with a **normal distribution** because cell-count summaries are often approximately symmetric in teaching examples
+-   This contrast lets students see why the same grouping variable may require different descriptive summaries depending on the outcome distribution
+
+------------------------------------------------------------------------
+
+## Lecture 5 Why Group Summaries Matter
+
+A pooled summary can be useful, and group-level summaries answer a more targeted biomedical question:
+
+**How does the distribution differ by treatment or disease category?**
+
+This is still descriptive because the goal is to characterize patterns rather than to fit a final inferential model.
+
+A pooled mean for IFN-gamma, for example, would combine placebo, low-dose, and high-dose patients into one number. That number may be mathematically correct for the entire sample, but it does not reveal whether the typical biomarker level rises with treatment intensity.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Mean by Treatment Group
+
+```{r}
+group_df |>
+  group_by(treatment) |>
+  summarise(
+    n = n(),
+    mean_ifng = mean(ifng),
+    sd_ifng = sd(ifng)
+  )
+```
+
+The mean summarizes the average level within each treatment arm. The standard deviation shows variability among participants in the same arm.
+
+The grouped mean is defined by:
+
+$$
+\bar{x}_g = \frac{1}{n_g}\sum_{i=1}^{n_g} x_{ig}
+$$
+
+In one sentence, this formula states that the group mean equals the sum of all observed values in group $g$ divided by the number of observations in that group.
+
+**Key elements of the formula**
+
+-   $\bar{x}_g$: the sample mean for group $g$
+-   $n_g$: the number of observations in group $g$
+-   $x_{ig}$: the observed value for the $i$th participant in group $g$
+-   $\sum_{i=1}^{n_g} x_{ig}$: the total of the observed values in that group
+
+The group-specific standard deviation is:
+
+$$
+s_g = \sqrt{\frac{1}{n_g - 1}\sum_{i=1}^{n_g}(x_{ig} - \bar{x}_g)^2}
+$$
+
+In one sentence, this formula states that the group standard deviation measures the typical distance of observations from the group mean by averaging squared deviations and then taking the square root.
+
+**Key elements of the formula**
+
+-   $s_g$: the sample standard deviation within group $g$
+-   $x_{ig} - \bar{x}_g$: the deviation of an observation from the group mean
+-   $(x_{ig} - \bar{x}_g)^2$: the squared deviation, used to quantify variability without positive and negative values canceling
+-   $n_g - 1$: the degrees-of-freedom adjustment used in sample-based variance estimation
+
+**How to interpret the output**
+
+-   `n` tells us how many patients contribute to each treatment-specific summary
+-   `mean_ifng` compares average IFN-gamma across arms and therefore compares group **location**
+-   `sd_ifng` compares within-group variability and therefore compares group **spread**
+-   If the high-dose arm has the largest mean, that suggests a higher central level of IFN-gamma in that group
+-   If one arm has a larger standard deviation, that suggests greater patient-to-patient heterogeneity within that treatment condition
+
+------------------------------------------------------------------------
+
+## Lecture 5 Median and IQR by Treatment Group
+
+```{r}
+group_df |>
+  group_by(treatment) |>
+  summarise(
+    median_ifng = median(ifng),
+    iqr_ifng = IQR(ifng),
+    median_cd4 = median(cd4_count),
+    iqr_cd4 = IQR(cd4_count)
+  )
+```
+
+Median and IQR are often especially informative for right-skewed biomarkers such as cytokines.
+
+The **median** is the middle ordered value, and the **interquartile range** measures the width of the middle 50% of the distribution.
+
+The IQR is defined as:
+
+$$
+\mathrm{IQR} = Q_3 - Q_1
+$$
+
+In one sentence, this formula states that the interquartile range equals the third quartile minus the first quartile, so it measures the spread of the central half of the observations.
+
+**Key elements of the formula**
+
+-   $Q_1$: the first quartile, or the value below which about 25% of observations fall
+-   $Q_3$: the third quartile, or the value below which about 75% of observations fall
+-   $Q_3 - Q_1$: the width of the middle 50% of the data
+
+**How to interpret the output**
+
+-   `median_ifng` provides a robust measure of group center for the right-skewed IFN-gamma variable
+-   `iqr_ifng` shows how wide the central bulk of IFN-gamma values is within each treatment arm
+-   `median_cd4` and `iqr_cd4` provide the same descriptive comparison for CD4 count
+-   When means and medians differ substantially, that often suggests skewness or tail influence
+-   For a biomarker with high-end values, the median may better represent a typical patient than the mean
+
+------------------------------------------------------------------------
+
+## Lecture 5 Boxplot for IFN-gamma by Group
+
+```{r}
+ggplot(group_df, aes(x = treatment, y = ifng)) +
+  geom_boxplot() +
+  labs(
+    title = "IFN-gamma by Treatment Group",
+    x = "Treatment group",
+    y = "IFN-gamma (pg/mL)"
+  )
+```
+
+A boxplot summarizes the median, the interquartile range, and the tails of the group-specific distributions.
+
+**R package and function context**
+
+-   `ggplot2`, which is part of the tidyverse, provides a grammar of graphics for building plots layer by layer
+-   `aes(x = treatment, y = ifng)` maps treatment group to the horizontal axis and IFN-gamma to the vertical axis
+-   `geom_boxplot()` draws the boxplot summary for each group
+-   `labs()` adds the title and axis labels needed for scientific interpretation
+
+------------------------------------------------------------------------
+
+## Lecture 5 Interpreting the Boxplot
+
+The boxplot allows students to compare:
+
+-   the location of the group medians\
+-   the width of the middle half of the data\
+-   the presence of higher-valued observations in the tail
+
+This is useful when a study question asks whether biomarker profiles differ across treatment conditions.
+
+**Key plot elements**
+
+-   the line inside each box marks the **group median**
+-   the lower and upper boundaries of the box mark $Q_1$ and $Q_3$
+-   the box height represents the **IQR**
+-   the whiskers extend into the lower and upper portions of the observed distribution
+-   points beyond the whiskers, when present, indicate observations unusually far from the central bulk of the data
+
+**How this plot answers the lecture question**
+
+Within the framing of this lecture, the boxplot is not just a generic picture of IFN-gamma. It is a comparative tool for evaluating whether treatment groups differ in:
+
+-   **location**, through vertical shifts in the medians
+-   **spread**, through differences in box heights and whisker lengths
+-   **distributional asymmetry**, through longer upper tails or more high-end points in some groups than in others
+
+If the high-dose group sits consistently higher on the y-axis than placebo, that suggests a higher typical IFN-gamma level. If one group has a taller box, that suggests more variability in the central portion of the distribution.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Violin Plot for IFN-gamma by Group
+
+```{r}
+ggplot(group_df, aes(x = treatment, y = ifng)) +
+  geom_violin() +
+  labs(
+    title = "Violin Plot of IFN-gamma by Treatment Group",
+    x = "Treatment group",
+    y = "IFN-gamma (pg/mL)"
+  )
+```
+
+A violin plot retains the group comparison and also shows the shape of the distribution within each group.
+
+**R package and function context**
+
+-   `geom_violin()` estimates and displays a smoothed distribution for each group
+-   the width of the violin at a given y-value reflects where values are more densely concentrated
+-   this plot complements the boxplot because it emphasizes **shape** rather than only quartile-based summaries
+
+**Key plot interpretation**
+
+-   wider regions indicate values that occur more frequently within a group
+-   narrow upper regions indicate fewer patients at high IFN-gamma levels
+-   asymmetry in the violin can reveal skewness
+-   differences in overall vertical placement still reflect differences in group location
+
+Within this lecture's framing, the violin plot is especially useful when we want to compare not only center and spread, but also whether the internal shape of the IFN-gamma distribution differs across treatment arms.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Group Comparison for CD4 Count
+
+```{r}
+ggplot(group_df, aes(x = treatment, y = cd4_count)) +
+  geom_boxplot() +
+  labs(
+    title = "CD4 Count by Treatment Group",
+    x = "Treatment group",
+    y = "CD4 count"
+  )
+```
+
+The same descriptive strategy can be applied to another continuous variable, even when its distribution is more symmetric.
+
+This slide is important because it shows that group comparison is a general descriptive strategy, not a method tied only to biomarkers with strong skewness. For CD4 count, the boxplots may look more balanced around the center, so mean-based and median-based summaries may tell a more similar story than they did for IFN-gamma.
+
+**Key plot interpretation**
+
+-   compare median CD4 count across treatment groups to assess differences in location
+-   compare box heights to assess differences in central spread
+-   compare whisker symmetry to assess whether the distributions appear roughly symmetric or more skewed
+-   use the plot to judge whether treatment groups differ only in center or also in variability
+
+------------------------------------------------------------------------
+
+## Lecture 5 Grouped Histograms
+
+```{r}
+ggplot(group_df, aes(x = ifng)) +
+  geom_histogram(bins = 18) +
+  facet_wrap(~ treatment, nrow = 1) +
+  labs(
+    title = "IFN-gamma Distribution Within Each Treatment Group",
+    x = "IFN-gamma (pg/mL)",
+    y = "Number of patients"
+  )
+```
+
+Faceted histograms show how distribution shape changes across groups.
+
+**R package and function context**
+
+-   `geom_histogram(bins = 18)` divides IFN-gamma into intervals and counts how many observations fall in each interval
+-   `facet_wrap(~ treatment, nrow = 1)` creates one histogram per treatment arm while keeping the same basic structure across panels
+-   faceting is especially useful in group-based descriptive analysis because it separates the within-group distribution from the overall pooled distribution
+
+**Key plot interpretation**
+
+-   the horizontal position of the bars shows the IFN-gamma range for each treatment arm
+-   the bar heights show how many patients fall in each interval
+-   right-skewness appears as concentration at lower values with a tail extending toward larger values
+-   comparing panels shows whether treatment groups differ in center, spread, or skewness
+
+Within the lecture's framing, this plot addresses the question of how group membership changes the observed **distribution**, not just the average.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Grouped Probabilities for Response Class
+
+```{r}
+group_df |>
+  count(treatment, response_class) |>
+  group_by(treatment) |>
+  mutate(probability = n / sum(n))
+```
+
+This table describes the conditional distribution of response class within each treatment arm.
+
+The within-group probability is defined by:
+
+$$
+\hat{P}(Y = y \mid G = g) = \frac{n_{yg}}{n_g}
+$$
+
+In one sentence, this formula states that the estimated probability of response category $y$ within group $g$ equals the number of patients in that response category and treatment group divided by the total number of patients in that treatment group.
+
+**Key elements of the formula**
+
+-   $\hat{P}(Y = y \mid G = g)$: the estimated conditional probability of response level $y$ given group $g$
+-   $n_{yg}$: the observed count in response category $y$ within group $g$
+-   $n_g$: the total number of observations in group $g$
+-   the vertical bar $\mid$ means “given,” so the probability is being computed within a specific treatment group
+
+**R package and function context**
+
+-   `count(treatment, response_class)` tallies the number of observations in each treatment-by-response combination
+-   `group_by(treatment)` tells R to compute subsequent quantities separately within each treatment arm
+-   `mutate(probability = n / sum(n))` converts raw counts into within-group probabilities
+
+------------------------------------------------------------------------
+
+## Lecture 5 Bar Plot of Grouped Response Probabilities
+
+```{r}
+ggplot(
+  group_df |>
+    count(treatment, response_class) |>
+    group_by(treatment) |>
+    mutate(probability = n / sum(n)),
+  aes(x = response_class, y = probability)
+) +
+  geom_col() +
+  facet_wrap(~ treatment, nrow = 1) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(
+    title = "Response Distribution Within Treatment Groups",
+    x = "Response class",
+    y = "Probability"
+  )
+```
+
+This plot makes the within-group response profile visible.
+
+**R package and function context**
+
+-   `geom_col()` draws bar heights equal to the supplied probability values
+-   `facet_wrap(~ treatment, nrow = 1)` creates one probability display per treatment group
+-   `scale_y_continuous(labels = percent_format())` formats the y-axis as percentages rather than raw proportions
+
+**Key plot interpretation**
+
+-   within each panel, the bar heights show the estimated probability of each response class for that treatment group
+-   comparing panels shows whether one treatment arm has a higher responder fraction or a lower progressive fraction
+-   because probabilities are computed within group, each panel describes the internal response composition of that group
+
+Within the framing of this lecture, this figure extends group comparison from continuous outcomes to categorical outcomes. The same descriptive logic applies: stratify by group, summarize within group, then compare across groups.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Why Summary Tables and Plots Belong Together
+
+A group summary table and a comparative plot answer complementary questions.
+
+The table provides exact values such as:
+
+-   group mean\
+-   group median\
+-   group sample size
+
+The plot provides an immediate visual comparison of location, spread, and shape.
+
+This pairing is central in biomedical reporting. Tables provide numerical precision, while plots provide pattern recognition. A reviewer may use the table to quote exact values and the figure to judge whether the underlying distributions are symmetric, skewed, tightly clustered, or heterogeneous across groups.
+
+------------------------------------------------------------------------
+
+## Lecture 5 Key Statistical Message
+
+Group-level description is central in biomedical research because many studies are organized around treatment, disease subtype, or exposure class.
+
+$$
+\text{Group summaries} + \text{comparative plots} = \text{descriptive view of subgroup structure}
+$$
+
+In one sentence, this formula states that descriptive understanding of subgroup structure comes from combining numerical summaries with visual comparisons.
+
+The same variable can look different once it is stratified by group.
+
+**Final synthesis**
+
+-   **group summaries** quantify center and spread within each subgroup
+-   **comparative plots** reveal differences in shape, skewness, and heterogeneity that may not be obvious from tables alone
+-   **subgroup structure** refers to the way clinical or treatment-defined groups differ in their observed data patterns
+-   together, these tools answer the lecture's central question: how descriptive statistics reveal differences in location, spread, and distribution across clinically meaningful groups
+
+------------------------------------------------------------------------
+
+## Lecture 5 Textbook Alignment for These Concepts
+
+These descriptive ideas align closely with the course texts:
+
+-   **Peck and Olsen (2025)** provide the foundational definitions of mean, median, quartiles, IQR, and graphical summaries as descriptive tools for understanding center and variability
+-   **Bruce, Bruce, and Gedeck (2020)** emphasize practical comparison of distributions, robust summaries, and visual inspection as core data-science habits
+-   **Cochran (1977)** provides the sampling perspective reminding us that subgroup summaries are sample-based descriptions of larger populations
+-   **Harrison and Pius (2021)** support the reproducible R workflow used here for grouped summaries and graphics in health data science
+-   **James, Witten, Hastie, Tibshirani, and Taylor (2021)** reinforce the importance of understanding data structure descriptively before proceeding to predictive or inferential modeling
+
+Within this lecture, those texts collectively support a single principle: group comparison begins with careful descriptive characterization of center, spread, distribution, and subgroup heterogeneity.
+
+------------------------------------------------------------------------
