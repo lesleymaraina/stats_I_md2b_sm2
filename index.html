@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.7.33">
 
   <meta name="author" content=" Lesley Chapman Hannah, Ph.D., M.S. College of Graduate Studies Northeast Ohio Medical University">
-  <title>Descriptive Statistics and Probability</title>
+  <title>Descriptive Group-Level Summaries</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -195,7 +195,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h2 style="color: #2A76DD;" class="title">Descriptive Statistics and Probability</h2>
+  <h2 style="color: #2A76DD;" class="title">Descriptive Group-Level Summaries</h2>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -206,59 +206,51 @@
 </div>
 
 </section>
-<section id="title-slide" class="slide level2">
-<h2>Title Slide</h2>
-<p><strong>Course theme:</strong> Descriptive Statistics and Probability<br>
-<strong>Central focus of this lecture block:</strong> group-level summaries and comparative plots<br>
-<strong>Guiding question:</strong> How do group summaries and comparative plots reveal differences in location, spread, and distribution?</p>
-<p>This lecture block stays within descriptive statistics. The goal is not yet to estimate a final regression model or test a formal causal claim. The goal is to describe how a variable behaves within clinically meaningful groups such as treatment arms, disease-status categories, or cohort strata.</p>
-</section>
-<section id="why-group-based-description-matters" class="slide level2">
-<h2>Why Group-Based Description Matters</h2>
-<p>In biomedical data analysis, a single overall summary can hide clinically meaningful heterogeneity.</p>
-<p>A pooled mean or a pooled plot may suggest that a biomarker has one typical pattern, even when patients in different treatment groups show very different distributions.</p>
-<p>That is why descriptive analysis often moves from:</p>
-<p><span class="math display">\[
-\text{overall summary} \rightarrow \text{group-specific summary} \rightarrow \text{comparative plot} \rightarrow \text{scientific interpretation}
-\]</span></p>
-<p>In one sentence, this expression states that descriptive group analysis starts by summarizing the full sample, then stratifies by a clinically meaningful grouping variable, then visualizes the group-specific patterns, and finally interprets those patterns in scientific terms.</p>
-<p><strong>Key elements of the formula</strong></p>
+<section class="slide level2">
+
+<h3 id="lecture-goals">Lecture Goal(s)</h3>
+<p><strong>Central focus:</strong></p>
 <ul>
-<li><strong>overall summary</strong>: a single description computed across all observations together</li>
-<li><strong>group-specific summary</strong>: a separate description computed within each subgroup</li>
-<li><strong>comparative plot</strong>: a visualization designed to compare groups directly</li>
+<li><p>descriptive analysis often compares groups defined by treatment, disease status, or cohort membership</p></li>
+<li><p>discuss how group summaries and comparative plots reveal differences in location, spread, and distribution</p></li>
+</ul>
+<p>Here we ask:</p>
+<blockquote>
+<p><strong>How do group summaries and comparative plots reveal differences in location, spread, and distribution?</strong></p>
+</blockquote>
+</section>
+<section class="slide level2">
+
+<h3 id="descriptive-group-analysis">Descriptive group analysis</h3>
+<div style="font-size:0.67em">
+<p>Descriptive Group Analysis involves:</p>
+<ul>
+<li>summarizing the full sample</li>
+<li>stratifying by a clinically meaningful grouping variable</li>
+<li>visualizing group-specific patterns</li>
+<li>interpreting scientifically meaningful patterns and trends</li>
+</ul>
+<p>Where</p>
+<ul>
+<li><strong>overall summary</strong>: single description computed across all observations together</li>
+<li><strong>group-specific summary</strong>: separate description computed within each subgroup</li>
+<li><strong>comparative plot</strong>: visualization designed to compare groups directly</li>
 <li><strong>scientific interpretation</strong>: the biomedical meaning assigned to observed differences in center, spread, or shape</li>
 </ul>
-</section>
-<section id="core-packages-used-in-this-deck" class="slide level2">
-<h2>Core Packages Used in This Deck</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href=""></a><span class="fu">library</span>(scales)</span>
-<span id="cb1-3"><a href=""></a><span class="fu">library</span>(GGally)</span>
-<span id="cb1-4"><a href=""></a></span>
-<span id="cb1-5"><a href=""></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">18</span>))</span>
-<span id="cb1-6"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Package context</strong></p>
+</section>
+<section id="lecture-roadmap" class="slide level2">
+<h2>Lecture Roadmap</h2>
+<div style="font-size:0.67em">
+<p><strong>Key Terms</strong></p>
 <ul>
-<li><strong>tidyverse</strong> is a collection of R packages for data import, manipulation, and visualization; here it supplies <code>tibble()</code>, <code>group_by()</code>, <code>summarise()</code>, <code>count()</code>, <code>mutate()</code>, and <code>ggplot()</code></li>
-<li><strong>scales</strong> provides formatting helpers for axes and labels; here <code>percent_format()</code> converts proportions into percentages for easier interpretation</li>
-<li><strong>GGally</strong> extends <code>ggplot2</code> with additional plotting tools for multivariable exploration; it is loaded here as part of a broader descriptive workflow even though the main examples in this block rely primarily on <code>ggplot2</code></li>
-<li><code>theme_set(theme_minimal(base_size = 18))</code> establishes a clean plotting theme and readable font size for every figure that follows</li>
-<li><code>set.seed(2026)</code> fixes the random-number seed so the simulated teaching example is reproducible</li>
+<li><strong>group</strong>: a set of observations sharing the same category, such as treatment arm or disease class</li>
+<li><strong>location</strong>: where values tend to be centered, often described by the mean or median</li>
+<li><strong>spread</strong>: how variable the observations are, often described by the standard deviation or IQR</li>
+<li><strong>distribution</strong>: the overall pattern of values, including center, spread, skewness, and tail behavior</li>
+<li><strong>heterogeneity</strong>: meaningful variation across subgroups rather than within one pooled population alone</li>
 </ul>
-</section>
-<section id="lecture-5-group-level-summaries-and-comparative-displays" class="slide level2">
-<h2>Lecture 5: Group-Level Summaries and Comparative Displays</h2>
-<p><strong>Central focus:</strong> descriptive analysis often compares groups defined by treatment, disease status, or cohort membership.</p>
-<p>This lecture block asks:</p>
-<p><strong>How do group summaries and comparative plots reveal differences in location, spread, and distribution?</strong></p>
-<p>The key idea is that descriptive statistics become more informative once they are aligned to the clinical structure of the study. In practice, investigators rarely care only about the overall distribution of a biomarker. They want to know whether distributions differ by exposure, intervention, or disease subgroup.</p>
-</section>
-<section id="lecture-5-roadmap" class="slide level2">
-<h2>Lecture 5 Roadmap</h2>
-<p>This block focuses on:</p>
+<p><strong>Tools [select]</strong>:</p>
 <ul>
 <li>mean and median by group<br>
 </li>
@@ -268,157 +260,138 @@
 </li>
 <li>violin plots<br>
 </li>
-<li>probability within groups<br>
-</li>
 <li>interpretation of subgroup heterogeneity</li>
 </ul>
-<p><strong>Key terms for this block</strong></p>
-<ul>
-<li><strong>group</strong>: a set of observations sharing the same category, such as treatment arm or disease class</li>
-<li><strong>location</strong>: where values tend to be centered, often described by the mean or median</li>
-<li><strong>spread</strong>: how variable the observations are, often described by the standard deviation or IQR</li>
-<li><strong>distribution</strong>: the overall pattern of values, including center, spread, skewness, and tail behavior</li>
-<li><strong>heterogeneity</strong>: meaningful variation across subgroups rather than within one pooled population alone</li>
-</ul>
+</div>
 </section>
-<section id="lecture-5-additional-conceptual-framing-for-group-comparisons" class="slide level2">
-<h2>Lecture 5 Additional Conceptual Framing for Group Comparisons</h2>
-<p>Before looking at individual tables and plots, it is important to define what a <strong>group comparison</strong> means in descriptive statistics.</p>
-<p>A <strong>group comparison</strong> asks whether the observed values of a variable look different once the sample is partitioned by a clinically meaningful categorical variable such as treatment arm, disease status, or cohort membership.</p>
-<p>In this lecture, the phrase <strong>group-level summaries and comparative plots</strong> means that we are not only describing one variable overall. We are describing how that variable behaves <strong>within each subgroup</strong> and then comparing those subgroup-specific descriptions across groups.</p>
-<p><strong>Why this matters in biomedical data</strong></p>
+<section class="slide level2">
+
+<h3 id="group-comparisons-background">Group Comparisons: Background</h3>
+<ul>
+<li><p><code>group comparison</code> : asks whether the observed values of a variable look different once the sample is partitioned by a biologically or clinically meaningful categorical variable such as treatment arm, disease status, or cohort membership</p></li>
+<li><p><code>group-level summaries and comparative plots</code> : describe how a variable behaves <strong>within user specified subgroups</strong> and then comparing those subgroup-specific descriptions across groups</p></li>
+</ul>
+<p><strong>General Applications</strong></p>
 <ul>
 <li>treatment groups may differ in average biomarker level</li>
 <li>disease subtypes may differ in variability, not only in average level</li>
 <li>two groups may have similar means but very different internal distributions</li>
 <li>descriptive comparison is often the first step before any formal modeling or hypothesis testing</li>
 </ul>
-<p>This framing is consistent with the descriptive emphasis in Peck and Olsen, the applied data-science perspective in Bruce, Bruce, and Gedeck, and the sampling logic emphasized by Cochran: subgroup summaries are meaningful only because the observed sample is being used to describe patterns in a larger scientific population.</p>
 </section>
-<section id="lecture-5-how-to-read-mean-and-median-in-group-summary-tables" class="slide level2">
-<h2>Lecture 5 How to Read Mean and Median in Group Summary Tables</h2>
-<p>When a summary table reports a <strong>mean by group</strong>, it is describing the arithmetic average within each subgroup.</p>
-<p>The <strong>mean</strong> is most informative when we want a measure of average level that uses every observed value directly. Because every value contributes to the mean, very high or very low observations can pull it upward or downward.</p>
-<p>When a summary table reports a <strong>median by group</strong>, it is describing the middle ordered value within each subgroup.</p>
-<p>The <strong>median</strong> is most informative when we want a measure of central location that is less sensitive to skewness or unusually large values. For right-skewed biomarkers, the median often aligns more closely with the value observed for a typical patient.</p>
-<p><strong>How to compare mean and median across groups</strong></p>
+<section class="slide level2">
+
+<h3 id="group-comparisons-background-1">Group Comparisons: Background</h3>
+<div style="font-size:0.67em">
 <ul>
-<li>if group means differ, the average level differs across subgroups</li>
-<li>if group medians differ, the central ordered location differs across subgroups</li>
-<li>if the mean is much larger than the median within a group, that suggests right-skewness or a high-end tail</li>
-<li>if mean and median are close within a group, that often suggests a more symmetric distribution</li>
+<li><p><code>summary tables</code> : report either - median by group or means by group</p></li>
+<li><p><code>mean</code>: measure of central tendency defined as the sum of all observed values divided by the number of observations</p>
+<ul>
+<li>every value contributes to the mean therefore very high or very low observations can pull the mean upward or downward</li>
+</ul></li>
+<li><p><code>median</code> : measure of central tendency defined as the middle value of a set of ordered observations</p>
+<ul>
+<li>most informative when we want a measure of central location that is less sensitive to skewness or unusually large values</li>
+<li>right-skewed biomarkers <span class="math inline">\(\rightarrow\)</span> median often aligns more closely with the value observed for a typical observations [i.e.: patient]</li>
+</ul></li>
+<li><p><code>median by group</code>: subgroup-specific measure of central tendency defined as the middle value of the ordered observations within each group</p></li>
 </ul>
-<p>Within the logic of this lecture, mean and median are not competing summaries. They are complementary summaries that help us understand <strong>location</strong> under different distributional shapes.</p>
+</div>
 </section>
-<section id="lecture-5-how-to-read-summary-tables-universally" class="slide level2">
-<h2>Lecture 5 How to Read Summary Tables Universally</h2>
-<p>A group summary table is most useful when it is read systematically.</p>
-<p><strong>Key things to look for universally when comparing groups</strong></p>
+<section class="slide level2">
+
+<h3 id="approach-for-comparing-groups">Approach for Comparing Groups</h3>
+<div style="font-size:0.67em">
+<p><strong>Key things to ask when comparing groups</strong></p>
 <ul>
 <li><strong>sample size</strong>: are the groups similar in size, or are some summaries based on much smaller numbers of observations?</li>
 <li><strong>location</strong>: do the means or medians differ across groups?</li>
 <li><strong>spread</strong>: do the standard deviations or IQRs differ across groups?</li>
 <li><strong>mean-median agreement</strong>: are the mean and median similar within groups, or do they diverge in ways that suggest skewness?</li>
 <li><strong>clinical magnitude</strong>: are the observed differences large enough to matter scientifically, not only numerically?</li>
-<li><strong>consistency across variables</strong>: do multiple outcomes point in the same descriptive direction?</li>
 </ul>
-<p>This checklist is useful across nearly all grouped descriptive summaries in biomedical research, whether the variable is a cytokine concentration, a cell count, a length-of-stay measure, or a categorical response profile.</p>
+</div>
 </section>
-<section id="lecture-5-interpreting-boxplots-and-violin-plots-more-deeply" class="slide level2">
-<h2>Lecture 5 Interpreting Boxplots and Violin Plots More Deeply</h2>
-<p>Boxplots and violin plots answer related but not identical descriptive questions.</p>
-<p>A <strong>boxplot</strong> is most effective when we want a compact summary of:</p>
+<section class="slide level2">
+
+<h3 id="plots-for-comparing-groups">Plots for comparing groups</h3>
+<div style="font-size:0.67em">
+<p><code>boxplot</code> : graphical summary of a quantitative variable that represents the ordered structure of the data using key percentiles and tail behavior</p>
+<p>Display the following:</p>
 <ul>
-<li>median</li>
-<li>quartiles</li>
-<li>interquartile range</li>
-<li>tail extension</li>
-<li>unusually extreme observations</li>
+<li>minimum (or lower whisker endpoint)</li>
+<li>first quartile (Q1 - 25th percentile)</li>
+<li>median (Q2 - 50th percentile)</li>
+<li>third quartile (Q3 - 75th percentile)</li>
+<li>maximum (or upper whisker endpoint)</li>
 </ul>
-<p>A <strong>violin plot</strong> is most effective when we also want to inspect the internal shape of the distribution, including whether the distribution appears concentrated, skewed, or possibly multimodal.</p>
-<p><strong>Universal checklist for plot-based comparison across groups</strong></p>
+<p><code>violin plot</code>: graphical display of a quantitative variable that combines a smoothed estimate of the distribution (density) with key features of the data’s central tendency and spread</p>
+<ul>
+<li><strong>width of the violin</strong> → proportional to the density of observations at a given value</li>
+<li><strong>central tendency</strong> → location of the median within the distribution</li>
+<li><strong>multimodality</strong> → presence of multiple peaks (subpopulations)</li>
+</ul>
+<p><strong>Considerations for plot-based comparison across groups</strong></p>
 <ul>
 <li>is one group positioned higher or lower overall on the y-axis?</li>
-<li>are some groups more vertically spread out than others?</li>
 <li>do some groups show stronger skewness or longer tails?</li>
 <li>do any groups contain more extreme values?</li>
 <li>does the shape suggest internal subgroup structure or heterogeneity within a treatment arm?</li>
 </ul>
-<p>In descriptive work, no single plot answers everything. That is why boxplots, violin plots, and grouped histograms often work best as complementary views of the same group comparison problem.</p>
+</div>
 </section>
-<section id="lecture-5-probability-within-groups-interpretation" class="slide level2">
-<h2>Lecture 5 Probability Within Groups: Interpretation</h2>
-<p>When we compute probability within groups, we are describing the internal composition of each subgroup.</p>
-<p>For example, if a treatment arm has a 40% responder probability, that does not mean 40% of the entire study responded. It means that <strong>within that treatment arm</strong>, 40% of patients were responders.</p>
-<p>This distinction matters because descriptive probability within groups is <strong>conditional</strong> on group membership.</p>
-<p>In biomedical interpretation, this helps answer questions such as:</p>
+<section class="slide level2">
+
+<h3 id="subgroup-heterogeneity">Subgroup Heterogeneity</h3>
+<div style="font-size:0.67em">
+<p><strong>subgroup heterogeneity</strong> :</p>
 <ul>
-<li>what fraction of placebo patients responded?</li>
-<li>what fraction of high-dose patients progressed?</li>
-<li>does the response composition shift across treatment conditions?</li>
-</ul>
-<p>This kind of grouped probability table is often the categorical-data analogue of a grouped mean or grouped boxplot: instead of describing where values lie on a continuous scale, it describes how category membership is distributed within each subgroup.</p>
-</section>
-<section id="lecture-5-interpreting-subgroup-heterogeneity" class="slide level2">
-<h2>Lecture 5 Interpreting Subgroup Heterogeneity</h2>
-<p><strong>Subgroup heterogeneity</strong> means that the observations within a group are not all tightly clustered around one common pattern.</p>
-<p>In descriptive statistics, subgroup heterogeneity may appear as:</p>
+<li><p>observations within a group are not all tightly clustered around one common pattern</p></li>
+<li><p>presence of meaningful differences in the distribution, central tendency, variability, or relationships within distinct subgroups of a population</p></li>
+<li><p>descriptive statistics - subgroup heterogeneity may appear as:</p>
 <ul>
-<li>a wide IQR</li>
-<li>a large standard deviation</li>
+<li>wide IQR</li>
+<li>large standard deviation</li>
 <li>long whiskers in a boxplot</li>
-<li>a wide or irregular violin shape</li>
+<li>wide or irregular violin shape</li>
 <li>multiple peaks in a histogram or violin plot</li>
 <li>large differences between low and high observations within the same group</li>
+</ul></li>
 </ul>
-<p><strong>Why subgroup heterogeneity matters</strong></p>
-<p>A group with a high mean is not necessarily a uniform group. It may contain:</p>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="study-context-and-dataset-overview">Study Context and Dataset Overview</h3>
+<div style="font-size:0.67em">
+<p>Here we evaluate data from a randomized immunotherapy study designed to evaluate how treatment intensity influences both immune system activity and clinical outcomes</p>
+<p><strong>Research Question</strong></p>
+<blockquote>
+<p>How do we describe and compare distributions across groups in biomedical data?</p>
+</blockquote>
+<blockquote>
+<p>How does the distribution differ by treatment or disease category?</p>
+</blockquote>
+<p>Immunotherapy study follows patients in three arms:</p>
 <ul>
-<li>patients who respond very strongly</li>
-<li>patients who respond weakly</li>
-<li>mixtures of clinically distinct subpopulations</li>
+<li>placebo</li>
+<li>low dose immunotherapy</li>
+<li>high dose immunotherapy</li>
 </ul>
-<p>That is why descriptive analysis should never stop at one number alone. The mean may summarize the center, but the spread and shape help determine whether that center represents a homogeneous group or a heterogeneous one.</p>
-</section>
-<section id="section" class="slide level2">
-<h2>————————————————————————</h2>
-</section>
-<section id="lecture-5-new-data-context" class="slide level2">
-<h2>Lecture 5 New Data Context</h2>
-<p>Suppose an immunotherapy study follows patients in three arms:</p>
+<p>For each patient, the study records multiple outcomes that reflect different dimensions of response:</p>
 <ul>
-<li>placebo<br>
-</li>
-<li>low dose<br>
-</li>
-<li>high dose</li>
+<li><strong>interferon-gamma [IFN-γ] concentration</strong>: continuous biomarker of immune activation</li>
+<li><strong>CD4+ T-cell count</strong>: continuous measure of immune system status</li>
+<li><strong>clinical response class</strong> [i.e.: responder vs non-responder or ordinal response categories] : categorical outcome reflecting treatment efficacy</li>
 </ul>
-<p>The study records interferon-gamma concentration, CD4 count, and clinical response class. The descriptive goal is to understand how the distributions differ across treatment groups.</p>
-<p>This is a classic biomedical descriptive setting. The treatment variable defines the groups, IFN-gamma and CD4 count are continuous outcomes summarized within groups, and response class is a categorical outcome whose proportions can also be compared across groups.</p>
+</div>
 </section>
-<section id="lecture-5-simulated-grouped-dataset" class="slide level2">
-<h2>Lecture 5 Simulated Grouped Dataset</h2>
+<section class="slide level2">
+
+<h3 id="simulated-immunotherapy-dataset">Simulated Immunotherapy Dataset</h3>
+<div style="font-size:0.67em">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">305</span>)</span>
-<span id="cb2-2"><a href=""></a></span>
-<span id="cb2-3"><a href=""></a>group_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb2-4"><a href=""></a>  <span class="at">patient_id =</span> <span class="fu">sprintf</span>(<span class="st">"G%03d"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">210</span>),</span>
-<span id="cb2-5"><a href=""></a>  <span class="at">treatment =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Placebo"</span>, <span class="st">"Low dose"</span>, <span class="st">"High dose"</span>), <span class="dv">210</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb2-6"><a href=""></a>  <span class="at">ifng =</span> <span class="fu">round</span>(<span class="fu">rlnorm</span>(</span>
-<span id="cb2-7"><a href=""></a>    <span class="dv">210</span>,</span>
-<span id="cb2-8"><a href=""></a>    <span class="at">meanlog =</span> <span class="fu">c</span>(<span class="st">"Placebo"</span> <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">11</span>), <span class="st">"Low dose"</span> <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">15</span>), <span class="st">"High dose"</span> <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">20</span>))[treatment],</span>
-<span id="cb2-9"><a href=""></a>    <span class="at">sdlog =</span> <span class="fl">0.42</span></span>
-<span id="cb2-10"><a href=""></a>  ), <span class="dv">2</span>),</span>
-<span id="cb2-11"><a href=""></a>  <span class="at">cd4_count =</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(</span>
-<span id="cb2-12"><a href=""></a>    <span class="dv">210</span>,</span>
-<span id="cb2-13"><a href=""></a>    <span class="at">mean =</span> <span class="fu">c</span>(<span class="st">"Placebo"</span> <span class="ot">=</span> <span class="dv">510</span>, <span class="st">"Low dose"</span> <span class="ot">=</span> <span class="dv">575</span>, <span class="st">"High dose"</span> <span class="ot">=</span> <span class="dv">645</span>)[treatment],</span>
-<span id="cb2-14"><a href=""></a>    <span class="at">sd =</span> <span class="dv">95</span></span>
-<span id="cb2-15"><a href=""></a>  )),</span>
-<span id="cb2-16"><a href=""></a>  <span class="at">response_class =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Responder"</span>, <span class="st">"Stable"</span>, <span class="st">"Progressive"</span>), <span class="dv">210</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-17"><a href=""></a>                          <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.35</span>, <span class="fl">0.40</span>, <span class="fl">0.25</span>))</span>
-<span id="cb2-18"><a href=""></a>)</span>
-<span id="cb2-19"><a href=""></a></span>
-<span id="cb2-20"><a href=""></a>group_df <span class="sc">|&gt;</span> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>group_df <span class="sc">|&gt;</span> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 5
   patient_id treatment  ifng cd4_count response_class
@@ -433,38 +406,38 @@
 8 G008       Low dose   8.92       631 Progressive   </code></pre>
 </div>
 </div>
-<p><strong>How to read the simulation setup</strong></p>
+<p><strong>Column descriptions</strong></p>
 <ul>
-<li><code>tibble()</code> creates a rectangular data object in tidyverse format</li>
-<li><code>sample()</code> assigns patients to treatment groups and response categories</li>
-<li><code>rlnorm()</code> simulates a right-skewed biomarker distribution for IFN-gamma, which is common for inflammatory markers</li>
-<li><code>rnorm()</code> simulates CD4 count from an approximately symmetric distribution</li>
-<li><code>slice_head(n = 8)</code> prints the first eight rows so students can inspect variable structure</li>
-</ul>
-<p><strong>Why these distributions were chosen</strong></p>
+<li><code>patient_id</code>: unique identifier for each patient in the study<br>
+</li>
+<li><code>treatment</code>: treatment arm assigned to the patient [<code>Placebo</code>, <code>Low dose</code>, <code>High dose</code>]
 <ul>
-<li>IFN-gamma is simulated with a <strong>log-normal distribution</strong> because biomarker concentrations are often positive and right-skewed</li>
-<li>CD4 count is simulated with a <strong>normal distribution</strong> because cell-count summaries are often approximately symmetric in teaching examples</li>
-<li>This contrast lets students see why the same grouping variable may require different descriptive summaries depending on the outcome distribution</li>
+<li>primary grouping variable used for comparisons across subgroups<br>
+</li>
+</ul></li>
+<li><code>ifng</code>: interferon-gamma concentration, a continuous biomarker of immune activation measured for each patient<br>
+</li>
+<li><code>cd4_count</code>: CD4 T-cell count - a continuous measure of immune system status for each patient<br>
+</li>
+<li><code>response_class</code>: clinical response category for each patient [<code>Responder</code>, <code>Stable</code>, <code>Progressive</code>]
+<ul>
+<li>categorical outcome describing treatment response</li>
+</ul></li>
 </ul>
+</div>
 </section>
-<section id="lecture-5-why-group-summaries-matter" class="slide level2">
-<h2>Lecture 5 Why Group Summaries Matter</h2>
-<p>A pooled summary can be useful, and group-level summaries answer a more targeted biomedical question:</p>
-<p><strong>How does the distribution differ by treatment or disease category?</strong></p>
-<p>This is still descriptive because the goal is to characterize patterns rather than to fit a final inferential model.</p>
-<p>A pooled mean for IFN-gamma, for example, would combine placebo, low-dose, and high-dose patients into one number. That number may be mathematically correct for the entire sample, but it does not reveal whether the typical biomarker level rises with treatment intensity.</p>
-</section>
-<section id="lecture-5-mean-by-treatment-group" class="slide level2">
-<h2>Lecture 5 Mean by Treatment Group</h2>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-mean-by-treatment-group">IFN-gamma: Mean by Treatment Group</h3>
+<div style="font-size:0.67em">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb4-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb4-5"><a href=""></a>    <span class="at">mean_ifng =</span> <span class="fu">mean</span>(ifng),</span>
-<span id="cb4-6"><a href=""></a>    <span class="at">sd_ifng =</span> <span class="fu">sd</span>(ifng)</span>
-<span id="cb4-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb3-5"><a href=""></a>    <span class="at">mean_ifng =</span> <span class="fu">mean</span>(ifng),</span>
+<span id="cb3-6"><a href=""></a>    <span class="at">sd_ifng =</span> <span class="fu">sd</span>(ifng)</span>
+<span id="cb3-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 4
   treatment     n mean_ifng sd_ifng
@@ -474,51 +447,78 @@
 3 Placebo      64      12.6    7.04</code></pre>
 </div>
 </div>
-<p>The mean summarizes the average level within each treatment arm. The standard deviation shows variability among participants in the same arm.</p>
-<p>The grouped mean is defined by:</p>
-<p><span class="math display">\[
-\bar{x}_g = \frac{1}{n_g}\sum_{i=1}^{n_g} x_{ig}
-\]</span></p>
-<p>In one sentence, this formula states that the group mean equals the sum of all observed values in group <span class="math inline">\(g\)</span> divided by the number of observations in that group.</p>
-<p><strong>Key elements of the formula</strong></p>
 <ul>
-<li><span class="math inline">\(\bar{x}_g\)</span>: the sample mean for group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(n_g\)</span>: the number of observations in group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(x_{ig}\)</span>: the observed value for the <span class="math inline">\(i\)</span>th participant in group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(\sum_{i=1}^{n_g} x_{ig}\)</span>: the total of the observed values in that group</li>
+<li><code>mean</code>: summarizes the average level within each treatment arm</li>
+<li><code>standard deviation</code>: shows variability among participants in the same arm</li>
 </ul>
-<p>The group-specific standard deviation is:</p>
-<p><span class="math display">\[
-s_g = \sqrt{\frac{1}{n_g - 1}\sum_{i=1}^{n_g}(x_{ig} - \bar{x}_g)^2}
-\]</span></p>
-<p>In one sentence, this formula states that the group standard deviation measures the typical distance of observations from the group mean by averaging squared deviations and then taking the square root.</p>
-<p><strong>Key elements of the formula</strong></p>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li><span class="math inline">\(s_g\)</span>: the sample standard deviation within group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(x_{ig} - \bar{x}_g\)</span>: the deviation of an observation from the group mean</li>
-<li><span class="math inline">\((x_{ig} - \bar{x}_g)^2\)</span>: the squared deviation, used to quantify variability without positive and negative values canceling</li>
-<li><span class="math inline">\(n_g - 1\)</span>: the degrees-of-freedom adjustment used in sample-based variance estimation</li>
-</ul>
-<p><strong>How to interpret the output</strong></p>
-<ul>
-<li><code>n</code> tells us how many patients contribute to each treatment-specific summary</li>
-<li><code>mean_ifng</code> compares average IFN-gamma across arms and therefore compares group <strong>location</strong></li>
+<li><code>n</code> : number of patients that contribute to each treatment-specific summary</li>
+<li><code>mean_ifng</code>: compares average IFN-gamma across arms and essentially comparing group <strong>location</strong></li>
 <li><code>sd_ifng</code> compares within-group variability and therefore compares group <strong>spread</strong></li>
 <li>If the high-dose arm has the largest mean, that suggests a higher central level of IFN-gamma in that group</li>
 <li>If one arm has a larger standard deviation, that suggests greater patient-to-patient heterogeneity within that treatment condition</li>
 </ul>
+</div>
 </section>
-<section id="lecture-5-median-and-iqr-by-treatment-group" class="slide level2">
-<h2>Lecture 5 Median and IQR by Treatment Group</h2>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-mean-by-treatment-group-1">IFN-gamma: Mean by Treatment Group</h3>
+<div style="font-size:0.67em">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb6-4"><a href=""></a>    <span class="at">median_ifng =</span> <span class="fu">median</span>(ifng),</span>
-<span id="cb6-5"><a href=""></a>    <span class="at">iqr_ifng =</span> <span class="fu">IQR</span>(ifng),</span>
-<span id="cb6-6"><a href=""></a>    <span class="at">median_cd4 =</span> <span class="fu">median</span>(cd4_count),</span>
-<span id="cb6-7"><a href=""></a>    <span class="at">iqr_cd4 =</span> <span class="fu">IQR</span>(cd4_count)</span>
-<span id="cb6-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-5"><a href=""></a>    <span class="at">mean_ifng =</span> <span class="fu">mean</span>(ifng),</span>
+<span id="cb5-6"><a href=""></a>    <span class="at">sd_ifng =</span> <span class="fu">sd</span>(ifng)</span>
+<span id="cb5-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  treatment     n mean_ifng sd_ifng
+  &lt;chr&gt;     &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 High dose    67      20.7    8.22
+2 Low dose     79      16.4    7.65
+3 Placebo      64      12.6    7.04</code></pre>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
+<ul>
+<li><p><code>treatment</code>: treatment arm defining each subgroup (<code>Placebo</code>, <code>Low dose</code>, <code>High dose</code>)<br>
+</p></li>
+<li><p><code>n</code>: number of patients within each treatment group (sample size for the subgroup)<br>
+</p></li>
+<li><p><code>mean_ifng</code>: average IFN-gamma concentration within the group<br>
+</p></li>
+<li><p><code>sd_ifng</code>: standard deviation of IFN-gamma within the group, quantifying variability around the mean</p></li>
+<li><p>IFN-gamma levels increase across treatment intensity:</p>
+<ul>
+<li>Placebo ≈ 12.6 pg/mL<br>
+</li>
+<li>Low dose ≈ 16.4 pg/mL<br>
+</li>
+<li>High dose ≈ 20.7 pg/mL</li>
+</ul></li>
+<li><p>variability is present in all groups [SD ≈ 7–8] <span class="math inline">\(\rightarrow\)</span> indicating spread around the mean within each treatment arm</p></li>
+<li><p>data suggest that IFN-gamma is right-skewed therefore the mean may be influenced by higher values<br>
+</p></li>
+<li><p>motivates comparing <strong>median and IQR</strong> as an additional summary of central tendency and spread</p></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-median-and-iqr-by-treatment-group">IFN-gamma: Median and IQR by Treatment Group</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-4"><a href=""></a>    <span class="at">median_ifng =</span> <span class="fu">median</span>(ifng),</span>
+<span id="cb7-5"><a href=""></a>    <span class="at">iqr_ifng =</span> <span class="fu">IQR</span>(ifng),</span>
+<span id="cb7-6"><a href=""></a>    <span class="at">median_cd4 =</span> <span class="fu">median</span>(cd4_count),</span>
+<span id="cb7-7"><a href=""></a>    <span class="at">iqr_cd4 =</span> <span class="fu">IQR</span>(cd4_count)</span>
+<span id="cb7-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   treatment median_ifng iqr_ifng median_cd4 iqr_cd4
@@ -528,96 +528,213 @@ s_g = \sqrt{\frac{1}{n_g - 1}\sum_{i=1}^{n_g}(x_{ig} - \bar{x}_g)^2}
 3 Placebo          11.4     6.68       538.    118.</code></pre>
 </div>
 </div>
-<p>Median and IQR are often especially informative for right-skewed biomarkers such as cytokines.</p>
-<p>The <strong>median</strong> is the middle ordered value, and the <strong>interquartile range</strong> measures the width of the middle 50% of the distribution.</p>
-<p>The IQR is defined as:</p>
-<p><span class="math display">\[
-\mathrm{IQR} = Q_3 - Q_1
-\]</span></p>
-<p>In one sentence, this formula states that the interquartile range equals the third quartile minus the first quartile, so it measures the spread of the central half of the observations.</p>
-<p><strong>Key elements of the formula</strong></p>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li><span class="math inline">\(Q_1\)</span>: the first quartile, or the value below which about 25% of observations fall</li>
-<li><span class="math inline">\(Q_3\)</span>: the third quartile, or the value below which about 75% of observations fall</li>
-<li><span class="math inline">\(Q_3 - Q_1\)</span>: the width of the middle 50% of the data</li>
-</ul>
-<p><strong>How to interpret the output</strong></p>
-<ul>
-<li><code>median_ifng</code> provides a robust measure of group center for the right-skewed IFN-gamma variable</li>
-<li><code>iqr_ifng</code> shows how wide the central bulk of IFN-gamma values is within each treatment arm</li>
-<li><code>median_cd4</code> and <code>iqr_cd4</code> provide the same descriptive comparison for CD4 count</li>
-<li>When means and medians differ substantially, that often suggests skewness or tail influence</li>
-<li>For a biomarker with high-end values, the median may better represent a typical patient than the mean</li>
-</ul>
-</section>
-<section id="lecture-5-boxplot-for-ifn-gamma-by-group" class="slide level2">
-<h2>Lecture 5 Boxplot for IFN-gamma by Group</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">ggplot</span>(group_df, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> ifng)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href=""></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb8-3"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"IFN-gamma by Treatment Group"</span>,</span>
-<span id="cb8-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Treatment group"</span>,</span>
-<span id="cb8-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"IFN-gamma (pg/mL)"</span></span>
-<span id="cb8-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><p>A boxplot summarizes the median, the interquartile range, and the tails of the group-specific distributions.</p>
-<p><strong>R package and function context</strong></p>
-<ul>
-<li><code>ggplot2</code>, which is part of the tidyverse, provides a grammar of graphics for building plots layer by layer</li>
-<li><code>aes(x = treatment, y = ifng)</code> maps treatment group to the horizontal axis and IFN-gamma to the vertical axis</li>
-<li><code>geom_boxplot()</code> draws the boxplot summary for each group</li>
-<li><code>labs()</code> adds the title and axis labels needed for scientific interpretation</li>
-</ul>
-</section>
-<section id="lecture-5-interpreting-the-boxplot" class="slide level2">
-<h2>Lecture 5 Interpreting the Boxplot</h2>
-<p>The boxplot allows students to compare:</p>
-<ul>
-<li>the location of the group medians<br>
+<li><code>treatment</code>: treatment arm defining each subgroup<br>
 </li>
-<li>the width of the middle half of the data<br>
+<li><code>median_ifng</code>: middle IFN-gamma value within each group</li>
+<li><code>iqr_ifng</code>: spread of the middle 50% of IFN-gamma values within each group<br>
 </li>
-<li>the presence of higher-valued observations in the tail</li>
+<li><code>median_cd4</code>: middle CD4 count within each group<br>
+</li>
+<li><code>iqr_cd4</code>: spread of the middle 50% of CD4 values within each group - <code>IFN-gamma and CD4</code>: show increasing central tendency across treatment groups**<br>
+</li>
+<li><code>IFN-gamma</code> : shows increasing variability - consistent with a right-skewed biomarker<br>
+</li>
+<li><code>median and IQR</code>: describe how the central bulk of the distribution shifts and spreads across groups</li>
 </ul>
-<p>This is useful when a study question asks whether biomarker profiles differ across treatment conditions.</p>
-<p><strong>Key plot elements</strong></p>
-<ul>
-<li>the line inside each box marks the <strong>group median</strong></li>
-<li>the lower and upper boundaries of the box mark <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_3\)</span></li>
-<li>the box height represents the <strong>IQR</strong></li>
-<li>the whiskers extend into the lower and upper portions of the observed distribution</li>
-<li>points beyond the whiskers, when present, indicate observations unusually far from the central bulk of the data</li>
-</ul>
-<p><strong>How this plot answers the lecture question</strong></p>
-<p>Within the framing of this lecture, the boxplot is not just a generic picture of IFN-gamma. It is a comparative tool for evaluating whether treatment groups differ in:</p>
-<ul>
-<li><strong>location</strong>, through vertical shifts in the medians</li>
-<li><strong>spread</strong>, through differences in box heights and whisker lengths</li>
-<li><strong>distributional asymmetry</strong>, through longer upper tails or more high-end points in some groups than in others</li>
-</ul>
-<p>If the high-dose group sits consistently higher on the y-axis than placebo, that suggests a higher typical IFN-gamma level. If one group has a taller box, that suggests more variability in the central portion of the distribution.</p>
-</section>
-<section id="lecture-5-violin-plot-for-ifn-gamma-by-group" class="slide level2">
-<h2>Lecture 5 Violin Plot for IFN-gamma by Group</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">ggplot</span>(group_df, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> ifng)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href=""></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"Violin Plot of IFN-gamma by Treatment Group"</span>,</span>
-<span id="cb9-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Treatment group"</span>,</span>
-<span id="cb9-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"IFN-gamma (pg/mL)"</span></span>
-<span id="cb9-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 </div>
-<img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>A violin plot retains the group comparison and also shows the shape of the distribution within each group.</p>
-<p><strong>R package and function context</strong></p>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-median-and-iqr-by-treatment-group-1">IFN-gamma: Median and IQR by Treatment Group</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-4"><a href=""></a>    <span class="at">median_ifng =</span> <span class="fu">median</span>(ifng),</span>
+<span id="cb9-5"><a href=""></a>    <span class="at">iqr_ifng =</span> <span class="fu">IQR</span>(ifng),</span>
+<span id="cb9-6"><a href=""></a>    <span class="at">median_cd4 =</span> <span class="fu">median</span>(cd4_count),</span>
+<span id="cb9-7"><a href=""></a>    <span class="at">iqr_cd4 =</span> <span class="fu">IQR</span>(cd4_count)</span>
+<span id="cb9-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  treatment median_ifng iqr_ifng median_cd4 iqr_cd4
+  &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 High dose        19.1     9.07       647     158.
+2 Low dose         14.9     8.82       567     118.
+3 Placebo          11.4     6.68       538.    118.</code></pre>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li><code>geom_violin()</code> estimates and displays a smoothed distribution for each group</li>
-<li>the width of the violin at a given y-value reflects where values are more densely concentrated</li>
-<li>this plot complements the boxplot because it emphasizes <strong>shape</strong> rather than only quartile-based summaries</li>
+<li>Median and IQR show that both biomarker levels and their central spread increase with treatment intensity, with IFN-gamma exhibiting greater variability at higher doses</li>
 </ul>
+<p><strong>IFN-gamma median increases with treatment intensity</strong>: shift in the typical biomarker level across groups</p>
+<ul>
+<li>Placebo ≈ 11.4 pg/mL<br>
+</li>
+<li>Low dose ≈ 14.9 pg/mL<br>
+</li>
+<li>High dose ≈ 19.1 pg/mL</li>
+</ul>
+<p><strong>IQR for IFN-gamma</strong>: greater spread in the central distribution at higher treatment levels<br>
+- Placebo ≈ 6.68<br>
+- Low dose ≈ 8.82<br>
+- High dose ≈ 9.07</p>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-median-and-iqr-by-treatment-group-2">IFN-gamma: Median and IQR by Treatment Group</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-4"><a href=""></a>    <span class="at">median_ifng =</span> <span class="fu">median</span>(ifng),</span>
+<span id="cb11-5"><a href=""></a>    <span class="at">iqr_ifng =</span> <span class="fu">IQR</span>(ifng),</span>
+<span id="cb11-6"><a href=""></a>    <span class="at">median_cd4 =</span> <span class="fu">median</span>(cd4_count),</span>
+<span id="cb11-7"><a href=""></a>    <span class="at">iqr_cd4 =</span> <span class="fu">IQR</span>(cd4_count)</span>
+<span id="cb11-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  treatment median_ifng iqr_ifng median_cd4 iqr_cd4
+  &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 High dose        19.1     9.07       647     158.
+2 Low dose         14.9     8.82       567     118.
+3 Placebo          11.4     6.68       538.    118.</code></pre>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
+<p><strong>CD4 median also increases across treatment</strong>: higher typical immune cell counts with increased treatment intensity</p>
+<ul>
+<li>Placebo ≈ 538<br>
+</li>
+<li>Low dose ≈ 567<br>
+</li>
+<li>High dose ≈ 647</li>
+</ul>
+<p><strong>CD4 IQR</strong> : variability is similar for placebo and low dose, but more spread in the high dose group</p>
+<ul>
+<li>Placebo ≈ 118<br>
+</li>
+<li>Low dose ≈ 118<br>
+</li>
+<li>High dose ≈ 158</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
+<ul>
+<li>plot shows a dose-dependent increase in immune response with moderate variability across patients</li>
+<li>median IFN-gamma increases from ~11.4 [placebo] to ~14.9 [low dose] to ~19.1 pg/mL [high dose]</li>
+</ul>
+<p>Median Comparison:</p>
+<ul>
+<li>high dose: median ≈ 19.1 pg/mL</li>
+<li>low dose: median ≈ 14.9 pg/mL</li>
+<li>placebo: median ≈ 11.4 pg/mL</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons-1">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
+<p>IQR Comparison:</p>
+<ul>
+<li>high dose group has the widest central spread <span class="math inline">\(\rightarrow\)</span> more variability in response across<br>
+</li>
+<li>consistent IFN-gamma levels across the placebo group <span class="math inline">\(\rightarrow\)</span> more tightly clustered IQR</li>
+<li>high dose: IQR ≈ 9.07 pg/mL</li>
+<li>low dose: IQR ≈ 8.82 pg/mL</li>
+<li>placebo: IQR ≈ 6.68 pg/mL</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons-2">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
+<p>Tails and outliers:</p>
+<ul>
+<li>all groups have higher values extending into the upper tail regions</li>
+<li>high dose outliers: ~38–43 pg/mL</li>
+<li>low dose outliers: up to ~49 pg/mL</li>
+<li>placebo outliers: up to ~53 pg/mL</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons-3">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-12-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Key plot interpretation</strong></p>
+<ul>
+<li><code>violin plot</code> : shows both the distribution shape and density of IFN-gamma within each treatment group</li>
+<li>width of the violin reflects the density of observations at that IFN-gamma level</li>
+<li>widest sections indicate where values are most concentrated within each group</li>
+<li>overall shape reveals distribution features such as skewness and multimodality</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons-4">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
 <p><strong>Key plot interpretation</strong></p>
 <ul>
 <li>wider regions indicate values that occur more frequently within a group</li>
@@ -625,178 +742,117 @@ s_g = \sqrt{\frac{1}{n_g - 1}\sum_{i=1}^{n_g}(x_{ig} - \bar{x}_g)^2}
 <li>asymmetry in the violin can reveal skewness</li>
 <li>differences in overall vertical placement still reflect differences in group location</li>
 </ul>
-<p>Within this lecture’s framing, the violin plot is especially useful when we want to compare not only center and spread, but also whether the internal shape of the IFN-gamma distribution differs across treatment arms.</p>
-</section>
-<section id="lecture-5-group-comparison-for-cd4-count" class="slide level2">
-<h2>Lecture 5 Group Comparison for CD4 Count</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">ggplot</span>(group_df, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> cd4_count)) <span class="sc">+</span></span>
-<span id="cb10-2"><a href=""></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb10-3"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb10-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"CD4 Count by Treatment Group"</span>,</span>
-<span id="cb10-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Treatment group"</span>,</span>
-<span id="cb10-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"CD4 count"</span></span>
-<span id="cb10-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 </div>
-<img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><p>The same descriptive strategy can be applied to another continuous variable, even when its distribution is more symmetric.</p>
-<p>This slide is important because it shows that group comparison is a general descriptive strategy, not a method tied only to biomarkers with strong skewness. For CD4 count, the boxplots may look more balanced around the center, so mean-based and median-based summaries may tell a more similar story than they did for IFN-gamma.</p>
-<p><strong>Key plot interpretation</strong></p>
+</section>
+<section class="slide level2">
+
+<h3 id="ifn-gamma-group-comparisons-5">IFN-gamma: group comparisons</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li>compare median CD4 count across treatment groups to assess differences in location</li>
+<li><p><strong>high dose group</strong>: greatest density around ~18–20 pg/mL with additional density extending into higher values [~30–40 pg/mL</p></li>
+<li><p><strong>low dose group</strong>: centered lower with highest density around ~12–15 pg/mL</p></li>
+<li><p><strong>placebo group</strong>: most concentrated around ~9–12 pg/mL</p></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="cd4-t-cell-count-group-comparison">CD4+ T-cell Count: Group Comparison</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Analysis Goals</strong></p>
+<ul>
+<li>compare median CD4+ T-cell count across treatment groups to assess differences in location</li>
 <li>compare box heights to assess differences in central spread</li>
 <li>compare whisker symmetry to assess whether the distributions appear roughly symmetric or more skewed</li>
-<li>use the plot to judge whether treatment groups differ only in center or also in variability</li>
 </ul>
+</div>
 </section>
-<section id="lecture-5-grouped-histograms" class="slide level2">
-<h2>Lecture 5 Grouped Histograms</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(group_df, <span class="fu">aes</span>(<span class="at">x =</span> ifng)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href=""></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb11-3"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> treatment, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb11-4"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb11-5"><a href=""></a>    <span class="at">title =</span> <span class="st">"IFN-gamma Distribution Within Each Treatment Group"</span>,</span>
-<span id="cb11-6"><a href=""></a>    <span class="at">x =</span> <span class="st">"IFN-gamma (pg/mL)"</span>,</span>
-<span id="cb11-7"><a href=""></a>    <span class="at">y =</span> <span class="st">"Number of patients"</span></span>
-<span id="cb11-8"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section class="slide level2">
 
-</div>
-<img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"><p>Faceted histograms show how distribution shape changes across groups.</p>
-<p><strong>R package and function context</strong></p>
-<ul>
-<li><code>geom_histogram(bins = 18)</code> divides IFN-gamma into intervals and counts how many observations fall in each interval</li>
-<li><code>facet_wrap(~ treatment, nrow = 1)</code> creates one histogram per treatment arm while keeping the same basic structure across panels</li>
-<li>faceting is especially useful in group-based descriptive analysis because it separates the within-group distribution from the overall pooled distribution</li>
-</ul>
-<p><strong>Key plot interpretation</strong></p>
-<ul>
-<li>the horizontal position of the bars shows the IFN-gamma range for each treatment arm</li>
-<li>the bar heights show how many patients fall in each interval</li>
-<li>right-skewness appears as concentration at lower values with a tail extending toward larger values</li>
-<li>comparing panels shows whether treatment groups differ in center, spread, or skewness</li>
-</ul>
-<p>Within the lecture’s framing, this plot addresses the question of how group membership changes the observed <strong>distribution</strong>, not just the average.</p>
-</section>
-<section id="lecture-5-grouped-probabilities-for-response-class" class="slide level2">
-<h2>Lecture 5 Grouped Probabilities for Response Class</h2>
+<h3 id="cd4-t-cell-count-group-comparison-1">CD4+ T-cell Count: Group Comparison</h3>
+<div style="font-size:0.67em">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>group_df <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href=""></a>  <span class="fu">count</span>(treatment, response_class) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href=""></a>  <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">probability =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 9 × 4
-# Groups:   treatment [3]
-  treatment response_class     n probability
-  &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt;       &lt;dbl&gt;
-1 High dose Progressive       15       0.224
-2 High dose Responder         24       0.358
-3 High dose Stable            28       0.418
-4 Low dose  Progressive       26       0.329
-5 Low dose  Responder         19       0.241
-6 Low dose  Stable            34       0.430
-7 Placebo   Progressive       12       0.188
-8 Placebo   Responder         20       0.312
-9 Placebo   Stable            32       0.5  </code></pre>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
+</figure>
 </div>
 </div>
-<p>This table describes the conditional distribution of response class within each treatment arm.</p>
-<p>The within-group probability is defined by:</p>
-<p><span class="math display">\[
-\hat{P}(Y = y \mid G = g) = \frac{n_{yg}}{n_g}
-\]</span></p>
-<p>In one sentence, this formula states that the estimated probability of response category <span class="math inline">\(y\)</span> within group <span class="math inline">\(g\)</span> equals the number of patients in that response category and treatment group divided by the total number of patients in that treatment group.</p>
-<p><strong>Key elements of the formula</strong></p>
+</div>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li><span class="math inline">\(\hat{P}(Y = y \mid G = g)\)</span>: the estimated conditional probability of response level <span class="math inline">\(y\)</span> given group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(n_{yg}\)</span>: the observed count in response category <span class="math inline">\(y\)</span> within group <span class="math inline">\(g\)</span></li>
-<li><span class="math inline">\(n_g\)</span>: the total number of observations in group <span class="math inline">\(g\)</span></li>
-<li>the vertical bar <span class="math inline">\(\mid\)</span> means “given,” so the probability is being computed within a specific treatment group</li>
+<li>box plots of CD4+ T-cell count shows a dose-dependent improvement in immune function with moderate variability across patients</li>
+<li>median CD4 count increases from ~538 cells/µL [placebo] to ~567 cells/µL [low dose] to ~647 cells/µL [high dose]</li>
 </ul>
-<p><strong>R package and function context</strong></p>
-<ul>
-<li><code>count(treatment, response_class)</code> tallies the number of observations in each treatment-by-response combination</li>
-<li><code>group_by(treatment)</code> tells R to compute subsequent quantities separately within each treatment arm</li>
-<li><code>mutate(probability = n / sum(n))</code> converts raw counts into within-group probabilities</li>
-</ul>
+</div>
 </section>
-<section id="lecture-5-bar-plot-of-grouped-response-probabilities" class="slide level2">
-<h2>Lecture 5 Bar Plot of Grouped Response Probabilities</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">ggplot</span>(</span>
-<span id="cb14-2"><a href=""></a>  group_df <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href=""></a>    <span class="fu">count</span>(treatment, response_class) <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href=""></a>    <span class="fu">group_by</span>(treatment) <span class="sc">|&gt;</span></span>
-<span id="cb14-5"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">probability =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)),</span>
-<span id="cb14-6"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> response_class, <span class="at">y =</span> probability)</span>
-<span id="cb14-7"><a href=""></a>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href=""></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb14-9"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> treatment, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb14-10"><a href=""></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
-<span id="cb14-11"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb14-12"><a href=""></a>    <span class="at">title =</span> <span class="st">"Response Distribution Within Treatment Groups"</span>,</span>
-<span id="cb14-13"><a href=""></a>    <span class="at">x =</span> <span class="st">"Response class"</span>,</span>
-<span id="cb14-14"><a href=""></a>    <span class="at">y =</span> <span class="st">"Probability"</span></span>
-<span id="cb14-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section class="slide level2">
 
+<h3 id="cd4-t-cell-count-group-comparison-2">CD4+ T-cell Count: Group Comparison</h3>
+<div style="font-size:0.67em">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</figure>
 </div>
-<img data-src="test_2_082025_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><p>This plot makes the within-group response profile visible.</p>
-<p><strong>R package and function context</strong></p>
+</div>
+</div>
+<p><strong>Interpretation</strong></p>
 <ul>
-<li><code>geom_col()</code> draws bar heights equal to the supplied probability values</li>
-<li><code>facet_wrap(~ treatment, nrow = 1)</code> creates one probability display per treatment group</li>
-<li><code>scale_y_continuous(labels = percent_format())</code> formats the y-axis as percentages rather than raw proportions</li>
+<li>horizontal position of the bars shows the IFN-gamma range for each treatment arm</li>
+<li>bar heights show how many patients fall in each interval</li>
+<li>histograms show that IFN-gamma distributions shift upward from ~11.4 [placebo] to ~14.9 [low dose] to ~19.1 pg/mL [high dose]</li>
+<li>right-skewness and outliers up to ~50 pg/mL indicates variable but dose-dependent immune response</li>
 </ul>
-<p><strong>Key plot interpretation</strong></p>
-<ul>
-<li>within each panel, the bar heights show the estimated probability of each response class for that treatment group</li>
-<li>comparing panels shows whether one treatment arm has a higher responder fraction or a lower progressive fraction</li>
-<li>because probabilities are computed within group, each panel describes the internal response composition of that group</li>
-</ul>
-<p>Within the framing of this lecture, this figure extends group comparison from continuous outcomes to categorical outcomes. The same descriptive logic applies: stratify by group, summarize within group, then compare across groups.</p>
+</div>
 </section>
-<section id="lecture-5-why-summary-tables-and-plots-belong-together" class="slide level2">
-<h2>Lecture 5 Why Summary Tables and Plots Belong Together</h2>
-<p>A group summary table and a comparative plot answer complementary questions.</p>
-<p>The table provides exact values such as:</p>
+<section class="slide level2">
+
+<h3 id="summary">Summary</h3>
+<div style="font-size:0.67em">
 <ul>
-<li>group mean<br>
-</li>
-<li>group median<br>
-</li>
-<li>group sample size</li>
-</ul>
-<p>The plot provides an immediate visual comparison of location, spread, and shape.</p>
-<p>This pairing is central in biomedical reporting. Tables provide numerical precision, while plots provide pattern recognition. A reviewer may use the table to quote exact values and the figure to judge whether the underlying distributions are symmetric, skewed, tightly clustered, or heterogeneous across groups.</p>
-</section>
-<section id="lecture-5-key-statistical-message" class="slide level2">
-<h2>Lecture 5 Key Statistical Message</h2>
-<p>Group-level description is central in biomedical research because many studies are organized around treatment, disease subtype, or exposure class.</p>
-<p><span class="math display">\[
-\text{Group summaries} + \text{comparative plots} = \text{descriptive view of subgroup structure}
-\]</span></p>
-<p>In one sentence, this formula states that descriptive understanding of subgroup structure comes from combining numerical summaries with visual comparisons.</p>
-<p>The same variable can look different once it is stratified by group.</p>
-<p><strong>Final synthesis</strong></p>
+<li>group-level summaries and plots transform raw biomedical data into interpretable evidence about how biological or clinical processes differ across populations</li>
+<li>computed group-specific summaries:
 <ul>
-<li><strong>group summaries</strong> quantify center and spread within each subgroup</li>
-<li><strong>comparative plots</strong> reveal differences in shape, skewness, and heterogeneity that may not be obvious from tables alone</li>
-<li><strong>subgroup structure</strong> refers to the way clinical or treatment-defined groups differ in their observed data patterns</li>
-<li>together, these tools answer the lecture’s central question: how descriptive statistics reveal differences in location, spread, and distribution across clinically meaningful groups</li>
-</ul>
-</section>
-<section id="lecture-5-textbook-alignment-for-these-concepts" class="slide level2">
-<h2>Lecture 5 Textbook Alignment for These Concepts</h2>
-<p>These descriptive ideas align closely with the course texts:</p>
+<li>mean → average level [sensitive to extreme values]</li>
+<li>median → typical value [robust to skewness]</li>
+<li>standard deviation / IQR → variability within groups</li>
+</ul></li>
+<li>used comparative visualizations:
 <ul>
-<li><strong>Peck and Olsen (2025)</strong> provide the foundational definitions of mean, median, quartiles, IQR, and graphical summaries as descriptive tools for understanding center and variability</li>
-<li><strong>Bruce, Bruce, and Gedeck (2020)</strong> emphasize practical comparison of distributions, robust summaries, and visual inspection as core data-science habits</li>
-<li><strong>Cochran (1977)</strong> provides the sampling perspective reminding us that subgroup summaries are sample-based descriptions of larger populations</li>
-<li><strong>Harrison and Pius (2021)</strong> support the reproducible R workflow used here for grouped summaries and graphics in health data science</li>
-<li><strong>James, Witten, Hastie, Tibshirani, and Taylor (2021)</strong> reinforce the importance of understanding data structure descriptively before proceeding to predictive or inferential modeling</li>
+<li>boxplots → summarize quartiles, spread, and outliers</li>
+<li>violin plots → reveal full distribution shape and density</li>
+</ul></li>
+<li>interpreted differences across groups in:
+<ul>
+<li>location [center of the distribution]</li>
+<li>spread [variability]</li>
+<li>distribution shape [skewness, tails, multimodality]</li>
+</ul></li>
 </ul>
-<p>Within this lecture, those texts collectively support a single principle: group comparison begins with careful descriptive characterization of center, spread, distribution, and subgroup heterogeneity.</p>
+</div>
 </section>
 <section class="slide level2">
 

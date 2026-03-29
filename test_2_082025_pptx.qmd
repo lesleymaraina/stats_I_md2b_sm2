@@ -2,20 +2,12 @@
 title: "Descriptive Group-Level Summaries"
 author: "<br><br><span style='font-size:25px;'><strong>Lesley Chapman Hannah, Ph.D., M.S.</strong></span><br>College of Graduate Studies<br>Northeast Ohio Medical University"
 
-format:
-  revealjs:
-    theme: simple
-    slide-number: true
-    chalkboard: true
-    transition: fade
-    incremental: false
-    width: 1400
-    height: 900
+format: pptx
+
 execute:
   echo: true
   warning: false
   message: false
-editor: visual
 ---
 
 ```{r, echo=FALSE}
